@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadDataError = require('../errors/not-found-err');
+const SecondRegError = require('../errors/second-reg-err');
 
 module.exports.getUsers = (req, res) => {
   User.find()
@@ -57,6 +58,7 @@ module.exports.createUser = (req, res) => {
       });
     })
     .catch((err) => {
+      if (err.name === 'MongoError') { throw new BadDataError('Повторная регистрация на тот же адрес почты'); }
       if (err.name === 'ValidationError') { throw new BadDataError('Введены некорректные данные'); }
     });
 };
