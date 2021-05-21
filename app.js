@@ -9,8 +9,9 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { response } = require('express');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3005 } = process.env;
 
 const app = express();
 
@@ -25,6 +26,9 @@ app.listen(PORT, () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+response.setHeader(
+  "Access-Control-AllowOrigin", "https://pr15front.students.nomoredomains.club"
+)
 
 app.use(requestLogger);
 app.post('/signup', celebrate({
