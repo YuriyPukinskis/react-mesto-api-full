@@ -1,23 +1,26 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-validator = require('validator');
+const validator = require('validator');
 
 const {
   getCardById, postCard, deleteCard, checkCard, getCards,
 } = require('../controllers/cards');
 
-
 router.get('/cards', getCards);
 
 router.get('/cards/:cardId', celebrate({
   params: Joi.object().keys({
-     cardId: Joi.string().hex().alphanum().required().min(2).max(24),
-   }),
- }), getCardById);
+    cardId: Joi.string().hex().alphanum().required()
+      .min(2)
+      .max(24),
+  }),
+}), getCardById);
 
 router.post('/cards', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
+    name: Joi.string().required()
+      .min(2)
+      .max(30),
     link: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
-validator = require('validator');
+const validator = require('validator');
 
 router.use(express.urlencoded({ extended: false }));
 
@@ -13,8 +13,10 @@ router.get('/users', getUsers);
 router.get('/users/me', getMe);
 
 router.get('/users/:id', celebrate({
- params: Joi.object().keys({
-    id: Joi.string().hex().alphanum().required().min(2).max(24),
+  params: Joi.object().keys({
+    id: Joi.string().hex().alphanum().required()
+      .min(2)
+      .max(24),
   }),
 }), getUserById);
 

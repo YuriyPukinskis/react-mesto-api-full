@@ -58,7 +58,7 @@ module.exports.createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'MongoError') { throw new BadDataError('Повторная регистрация на тот же адрес почты'); }
+      if (err.name === 'MongoError') { throw new SecondRegError('Повторная регистрация на тот же адрес почты'); }
       if (err.name === 'ValidationError') { throw new BadDataError('Введены некорректные данные'); }
     });
 };

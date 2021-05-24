@@ -12,8 +12,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    // return handleAuthError(res);
-    throw new NoAuthError ('Необходима авторизация');
+    throw new NoAuthError('Необходима авторизация');
   }
 
   const token = extractBearerToken(authorization);
@@ -22,8 +21,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'super-strong-secret');
   } catch (err) {
-    // return handleAuthError(res);
-    throw new NoAuthError ('Необходима авторизация');
+    throw new NoAuthError('Необходима авторизация');
   }
 
   req.user = payload;
