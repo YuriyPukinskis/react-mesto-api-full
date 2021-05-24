@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+
 const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const cors = require('cors');
@@ -24,22 +24,22 @@ app.listen(PORT, () => {
 
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// app.use(cors({
-//   origin: true,
-//   exposedHeaders: '*',
-//   credentials: true,
-// }));
+app.use(cors({
+  origin: true,
+  exposedHeaders: '*',
+  credentials: true,
+}));
 
-app.options('*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://pr15front.students.nomoredomains.club');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
-  res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE', 'PATCH']);
-  res.set('Access-Control-Allow-Credentials', 'true');
-  res.send('ok');
-});
+// app.options('*', (req, res) => {
+//   res.set('Access-Control-Allow-Origin', 'https://pr15front.students.nomoredomains.club');
+//   res.set('Access-Control-Allow-Headers', 'Content-Type');
+//   res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE', 'PATCH']);
+//   res.set('Access-Control-Allow-Credentials', 'true');
+//   res.send('ok');
+// });
 app.use(requestLogger);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
