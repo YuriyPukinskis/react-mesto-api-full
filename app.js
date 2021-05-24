@@ -28,7 +28,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: 'https://pr15front.students.nomoredomains.club',
+  origin: true,
+  exposedHeaders: '*',
   credentials: true,
 }));
 app.use(requestLogger);
