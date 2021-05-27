@@ -2,19 +2,17 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
-const BadDataError = require('../errors/not-found-err');
+const BadDataError = require('../errors/not-correct-data');
 const SecondRegError = require('../errors/second-reg-err');
+const AuthError = require('../errors/no-auth-err');
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find()
-    .orFail(new Error('NotValidId'))
-    .then((card) => {
-      res.status(200).send(card);
+    .then((users) => {
+      res.status(200).send(users);
     })
     .catch((err) => {
-      if (err.message === 'NotValidId') {
-        throw new NotFoundError('Пользователя нет в базе');
-      }
+      next(err);
     });
 };
 
@@ -42,7 +40,7 @@ module.exports.getMe = (req, res) => {
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
@@ -58,7 +56,9 @@ module.exports.createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'MongoError') { throw new SecondRegError('Повторная регистрация на тот же адрес почты'); }
+      if (err.name === 'MongoError') {
+        next(new SecondRegError('Повторная регистрация на тот же адрес почты'));
+      }
       if (err.name === 'ValidationError') { throw new BadDataError('Введены некорректные данные'); }
     });
 };
@@ -85,7 +85,7 @@ module.exports.patchUserAvatar = (req, res) => {
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -94,6 +94,15 @@ module.exports.login = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(401).send(err);
+      // res.status(401).send(err.name);
+      // res.status(401).send('Неверный логин/пароль');
+      // // if (err.name === 'Error') { throw new NotFoundError('TEXT TEXT TEXT'); }
+      // throw new AuthError('Неверный логин/пароль');
+      // if (err.name === 'Error') {
+      //   next(new AuthError('Неверный логин/пароль'));
+      // }
+      if (err.name === 'Error') {
+        next(new AuthError('Неверный логин/пароль'));
+      }
     });
 };

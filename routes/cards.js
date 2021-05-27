@@ -6,9 +6,9 @@ const {
   getCardById, postCard, deleteCard, checkCard, getCards,
 } = require('../controllers/cards');
 
-router.get('/cards', getCards);
+router.get('/', getCards);
 
-router.get('/cards/:cardId', celebrate({
+router.get('/:cardId', celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().hex().alphanum().required()
       .min(2)
@@ -16,7 +16,7 @@ router.get('/cards/:cardId', celebrate({
   }),
 }), getCardById);
 
-router.post('/cards', celebrate({
+router.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required()
       .min(2)
@@ -32,7 +32,7 @@ router.post('/cards', celebrate({
       }),
   }),
 }), postCard);
-router.put('/cards/:cardId/likes', checkCard);
-router.delete('/cards/:cardId', deleteCard);
+router.put('/:cardId/likes', checkCard);
+router.delete('/:cardId', deleteCard);
 
 module.exports = router;

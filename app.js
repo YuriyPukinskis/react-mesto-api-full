@@ -33,13 +33,6 @@ app.use(cors({
   credentials: true,
 }));
 
-// app.options('*', (req, res) => {
-//   res.set('Access-Control-Allow-Origin', 'https://pr15front.students.nomoredomains.club');
-//   res.set('Access-Control-Allow-Headers', 'Content-Type');
-//   res.set('Access-Control-Allow-Methods', ['PUT', 'GET', 'POST', 'DELETE', 'PATCH']);
-//   res.set('Access-Control-Allow-Credentials', 'true');
-//   res.send('ok');
-// });
 app.use(requestLogger);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -56,9 +49,9 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
-app.use(auth);
-app.use('/', routesUsers);
-app.use('/', routesCards);
+// app.use(auth);
+app.use('/users', auth, routesUsers);
+app.use('/cards', auth, routesCards);
 
 app.use(errorLogger);
 app.use(errors());
@@ -66,7 +59,7 @@ app.use('*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
 
-app.use((err, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
   res
@@ -76,4 +69,5 @@ app.use((err, res) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
+  next();
 });

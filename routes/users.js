@@ -9,10 +9,10 @@ const {
   getUsers, getMe, getUserById, patchUserData, patchUserAvatar,
 } = require('../controllers/users');
 
-router.get('/users', getUsers);
-router.get('/users/me', getMe);
+router.get('/', getUsers);
+router.get('/me', getMe);
 
-router.get('/users/:id', celebrate({
+router.get('/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().hex().alphanum().required()
       .min(2)
@@ -20,14 +20,14 @@ router.get('/users/:id', celebrate({
   }),
 }), getUserById);
 
-router.patch('/users/me', celebrate({
+router.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required().min(2).max(30),
   }),
 }), patchUserData);
 
-router.patch('/users/me/avatar', celebrate({
+router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
