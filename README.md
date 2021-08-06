@@ -2,9 +2,9 @@
 
 ## Ссылки на развернутый проект
   
-Фронт:  pr15front.students.nomoredomains.club
+Фронт:  http://pr15front.students.nomoredomains.club
 
-Бэк:  api.pr15back.students.nomoredomains.club
+Бэк:  http://api.pr15back.students.nomoredomains.club
 
 ## О проекте
 Репозиторий для приложения проекта `Mesto`, включающий фронтенд и бэкенд части приложения.
@@ -25,6 +25,7 @@ JavaScript
 4) Установить зависимости
 5) Запустить приложение
 
+Полный список команд для взаимодействия с проектом приведен в файле <u>package.json</u>
 
 ## Статус
 ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+) `Завершен`
